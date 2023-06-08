@@ -33,7 +33,7 @@ def dsigmadTx(Tx, Ti, mx, eps, mA, iS):
 
 def dphidTx(Tx, mx, eps, mA, temp_scale=1e80):
     """
-    Upscattered chi dark matter flux, contributions from protons and helium included
+    Differential upscattered chi dark matter flux, contributions from protons and helium included
     Tx: outgoing DM kinetic energy
     mx: DM mass
     eps: coupling
@@ -54,13 +54,27 @@ def dphidTx(Tx, mx, eps, mA, temp_scale=1e80):
     return s * Deff * rho_X / mx / temp_scale
 
 
-def plot_phi():
+def CRDM_phi(mx, eps, mA):
+    """
+    Upscattered chi dark matter flux, contributions from protons and helium included
+    mx: DM mass
+    eps: coupling
+    mA: mediator mass
+    """
+    Tx_min = 0
+    Tx_max = 100
+    def ff(Tx):
+        return dphidTx(Tx, mx, eps, mA)
+    return log_int(ff, Tx_min, Tx_max)
+
+
+def _plot_phi():
     mx = 1e-3 # DM mass [GeV]
     mA = 1e-3 # mediator mass [GeV]
     eps = 1e-3 # coupling
 
-    tt = np.logspace(-5, 1, 100)
-    yy = [unitsCM2S * t * dphidTx(t, mx, eps, mA) for t in tt]
+    tt = np.logspace(-5, 1, 100) # DM kinematic energy T_x [GeV]
+    yy = [unitsCM2S * t * dphidTx(t, mx, eps, mA) for t in tt] # the differential flux [cm^-2 s^-1]
 
     plt.figure(figsize=(8, 6))
     plt.plot(tt, yy)
@@ -71,7 +85,3 @@ def plot_phi():
     plt.xticks(fontsize=16)
     plt.yticks(fontsize=16)
     plt.show()
-
-
-if __name__ == "__main__":
-    plot_phi()

@@ -6,7 +6,13 @@ def deMax(Tx, mx):
     return np.sqrt(2*mx*Tx)
 
 def TxMax(Ti, mi, mx, de):
-
+    """
+    Minimum kinetic energy of the DM
+    Ti: kinetic energy of the cosmic ray
+    mi: mass of the cosmic ray
+    mx: mass of the DM
+    de: mass spliting
+    """
     if de == 0:
         return 0
     d1 = 2*(mi+mx)**2 + 4*mx*Ti
