@@ -3,7 +3,7 @@ from scipy.integrate import quad
 from .const import *
 
 
-def log_int(func, a, b):
+def log_int(func, a, b, **kwargs):
     """
     Integrate a function in log space, designed for extreme small/large functions
     func: the function to integrate
@@ -12,7 +12,7 @@ def log_int(func, a, b):
     """
     def ff(u):
         return np.exp(u)*func(np.exp(u))
-    return quad(ff, np.log(a), np.log(b))[0]
+    return quad(ff, np.log(a), np.log(b), **kwargs)[0]
 
 
 def Fhelm(q, A):

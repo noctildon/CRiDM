@@ -31,13 +31,14 @@ def dsigmadTx(Tx, Ti, mx, eps, mA, iS):
     return xsec_Tchi(gD, g_N, mx, mA, mi, Tx, Ti, rays['Ai']['he4'], fm, 'vector')
 
 
-def dphidTx(Tx, mx, eps, mA, temp_scale=1e80):
+def dphidTx(Tx, mx, eps, mA, temp_scale=1e80, limit=50):
     """
     Differential upscattered chi dark matter flux, contributions from protons and helium included
     Tx: outgoing DM kinetic energy
     mx: DM mass
     eps: coupling
     mA: mediator mass
+    limit: quad integration limit
     temp_scale: to fix the precision problem
     """
     s = 0
@@ -49,7 +50,7 @@ def dphidTx(Tx, mx, eps, mA, temp_scale=1e80):
         ff_min = max(TdatMin[idx], TiMin(Tx, rays['mi'][iS], mx, 0))
         ff_max = max(TdatMax[idx], TiMin(Tx, rays['mi'][iS], mx, 0))
         # s += quad(ff, ff_min, ff_max)[0] # integrate in linear space
-        s += log_int(ff, ff_min, ff_max) # integrate in log space
+        s += log_int(ff, ff_min, ff_max, limit=limit) # integrate in log space
 
     return s * Deff * rho_X / mx / temp_scale
 
