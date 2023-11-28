@@ -24,12 +24,13 @@ def dIdR(r, spec):
     specs: 'proton' or 'helium'
     r: rigidity
     """
-    if spec == 'proton':
-        raw = proton_data
-    elif spec == 'he4':
-        raw = he4_data
-    else:
-        raise ValueError('spec must be proton or helium')
+    match spec:
+        case 'proton':
+            raw = proton_data
+        case 'he4':
+            raw = he4_data
+        case _:
+            raise ValueError('spec must be proton or helium')
 
     f = interp1d(raw[:, 0], raw[:, 1], fill_value='extrapolate')
     return f(r)

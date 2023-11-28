@@ -15,12 +15,15 @@ def xsec_Tchi(g_chi, g_N, m_chi, m_phi, m_i, T_chi, T_i, A, ff, current):
     ff: squared form factor
     current: 'vector', 'axial'
     """
-    if current == 'vector':
-        res = A**2*ff * (m_chi*(mn+T_i)**2 - T_chi*((mn+m_chi)**2 + 2*m_chi*T_i) + m_chi*T_chi**2 )
-        res /= 4*np.pi*(2*m_chi*T_chi + m_phi**2)**2 * (T_i**2 + 2*m_i*T_i)
-    elif current == 'axial':
-        res = 4*m_chi*mn**2 + 2*T_chi*(m_chi**2+mn**2) + m_chi*T_chi**2
-        res /= 8*np.pi*(2*m_chi*T_chi + m_phi**2)**2 * (T_i**2 + 2*m_i*T_i)
+    match current:
+        case 'vector':
+            res = A**2*ff * (m_chi*(mn+T_i)**2 - T_chi*((mn+m_chi)**2 + 2*m_chi*T_i) + m_chi*T_chi**2 )
+            res /= 4*np.pi*(2*m_chi*T_chi + m_phi**2)**2 * (T_i**2 + 2*m_i*T_i)
+        case 'axial':
+            res = 4*m_chi*mn**2 + 2*T_chi*(m_chi**2+mn**2) + m_chi*T_chi**2
+            res /= 8*np.pi*(2*m_chi*T_chi + m_phi**2)**2 * (T_i**2 + 2*m_i*T_i)
+        case _:
+            raise ValueError('current must be vector or axial')
     res *= g_chi**2 * g_N**2
     return res
 
@@ -39,11 +42,14 @@ def xsec_er(er, g_chi, g_N, m_chi, m_phi, m_T, T_chi, A, ff, current):
     ff: form factor
     current: 'vector', 'axial'
     """
-    if current == 'vector':
-        res = ff*A**2 * (2*(m_chi+T_chi)**2 - er/mn**2 * (m_T*m_chi**2 + mn**2*(m_T+2*(m_chi+T_chi))) + er**2 )
-        res /= np.pi*(2*m_T*er + m_phi**2) * (T_chi**2 + 2*m_chi*T_chi)
-    elif current == 'axial':
-        res = m_T*(2*(m_chi+T_chi)**2 - er*(m_T*(1+ (m_chi/mn)**2) + 2*(m_chi+T_chi) - er))
-        res /= np.pi*(2*m_T*er + m_phi**2)**2 * (T_chi**2 + 2*m_chi*T_chi)
+    match current:
+        case 'vector':
+            res = ff*A**2 * (2*(m_chi+T_chi)**2 - er/mn**2 * (m_T*m_chi**2 + mn**2*(m_T+2*(m_chi+T_chi))) + er**2 )
+            res /= np.pi*(2*m_T*er + m_phi**2) * (T_chi**2 + 2*m_chi*T_chi)
+        case 'axial':
+            res = m_T*(2*(m_chi+T_chi)**2 - er*(m_T*(1+ (m_chi/mn)**2) + 2*(m_chi+T_chi) - er))
+            res /= np.pi*(2*m_T*er + m_phi**2)**2 * (T_chi**2 + 2*m_chi*T_chi)
+        case _:
+            raise ValueError('current must be vector or axial')
     res *= g_chi**2 * g_N**2 * m_T
     return res
