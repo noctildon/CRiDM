@@ -35,12 +35,10 @@ def dphidTx2Split(Tx2, mx, de, gxi, mA, temp_scale=1e80):
     temp_scale: to fix the precision problem
     """
     s = 0
-    phis = []
     for idx, iS in zip([0, 1], ['proton', 'he4']):
         if Tx2 > TxMin(TdatMax[idx], rays['mi'][iS], mx, de):
             def ff(Tii):
                 phi = dPhidT(Tii, iS)
-                phis.append(phi)
                 return temp_scale*phi*dsigmadTxSplit(Tx2, Tii, mx, de, gxi, mA, iS)
 
             ff_min = max(TdatMin[idx], TiMin(Tx2, rays['mi'][iS], mx, de))
