@@ -15,6 +15,7 @@ def xsec_Tchi(g_chi, g_N, m_chi, m_phi, m_i, T_chi, T_i, A, ff, current):
     ff: squared form factor
     current: 'vector', 'axial'
     """
+    mn = m_i # there's typo in the paper
     match current:
         case 'vector':
             res = A**2*ff * (m_chi*(mn+T_i)**2 - T_chi*((mn+m_chi)**2 + 2*m_chi*T_i) + m_chi*T_chi**2 )
