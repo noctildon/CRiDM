@@ -4,6 +4,7 @@ from .const import *
 def xsec_Tchi(g_chi, g_N, m_chi, m_phi, m_i, T_chi, T_i, A, ff, current):
     """
     Differential cross sections of DM-cosmic ray nucleus. Eq2 and Eq3 in 1907.03782
+    NOTE: there's typo in paper m_N (nucleon mass) -> m_i (cosmic ray mass)
     g_chi: vector/axial DM coupling
     g_N: vector/axial nucleon coupling
     m_chi: DM mass
@@ -15,13 +16,12 @@ def xsec_Tchi(g_chi, g_N, m_chi, m_phi, m_i, T_chi, T_i, A, ff, current):
     ff: squared form factor
     current: 'vector', 'axial'
     """
-    mn = m_i # there's typo in the paper
     match current:
         case 'vector':
-            res = A**2*ff * (m_chi*(mn+T_i)**2 - T_chi*((mn+m_chi)**2 + 2*m_chi*T_i) + m_chi*T_chi**2 )
+            res = A**2*ff * (m_chi*(m_i+T_i)**2 - T_chi*((m_i+m_chi)**2 + 2*m_chi*T_i) + m_chi*T_chi**2 )
             res /= 4*np.pi*(2*m_chi*T_chi + m_phi**2)**2 * (T_i**2 + 2*m_i*T_i)
         case 'axial':
-            res = 4*m_chi*mn**2 + 2*T_chi*(m_chi**2+mn**2) + m_chi*T_chi**2
+            res = 4*m_chi*m_i**2 + 2*T_chi*(m_chi**2+m_i**2) + m_chi*T_chi**2
             res /= 8*np.pi*(2*m_chi*T_chi + m_phi**2)**2 * (T_i**2 + 2*m_i*T_i)
         case _:
             raise ValueError('current must be vector or axial')
