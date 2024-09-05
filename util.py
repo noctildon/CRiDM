@@ -3,16 +3,23 @@ from scipy.integrate import quad
 from .const import *
 
 
-def log_int(func, a, b, **kwargs):
+def log_int(func, a, b, mode='log', **kwargs):
     """
     Integrate a function in log space, designed for extreme small/large functions
     func: the function to integrate
     a, b: integration range (original, not in log space)
     return: integral
     """
-    def ff(u):
-        return np.exp(u)*func(np.exp(u))
-    return quad(ff, np.log(a), np.log(b), **kwargs)[0]
+    match mode:
+        case 'log':
+            def func_log(u):
+                return np.exp(u)*func(np.exp(u))
+            return quad(func_log, np.log(a), np.log(b), **kwargs)[0]
+
+        case 'linear':
+            return quad(func, a, b, **kwargs)[0]
+
+    raise ValueError('Invalid mode')
 
 
 def Fhelm(q, A):
